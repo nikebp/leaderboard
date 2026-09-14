@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: leaderboard
-          image: ghcr.io/nikebp/leaderboard:sha-000000
+          image: ghcr.io/nikebp/leaderboard:sha-6250d4b
           ports:
             - containerPort: 8080
           env:
