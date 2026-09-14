@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: leaderboard
+  labels:
+    app: leaderboard
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: leaderboard
+  template:
+    metadata:
+      labels:
+        app: leaderboard
+    spec:
+      containers:
+        - name: leaderboard
+          image: ghcr.io/nikebp/leaderboard:sha-000000
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATA_DIR
+              value: /data
+          volumeMounts:
+            - name: data
+              mountPath: /data
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 300m
+              memory: 96Mi
+      volumes:
+        - name: data
+          persistentVolumeClaim:
+            claimName: leaderboard-data
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: leaderboard-data
+  labels:
+    app: leaderboard
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 100Mi
